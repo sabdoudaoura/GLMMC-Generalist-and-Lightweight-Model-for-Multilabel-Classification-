@@ -1,6 +1,6 @@
-# 👑 GLMMC: Generalist and Lightweight Model for Multilabel Classification 
+# 🤖 GLMMC: Generalist and Lightweight Model for Multilabel Classification 
 
-GLMMC is a Multilabel Classification Model capable of classifyin texts into various labels predifined entties using a bidirectional transformer encoder (BERT-like). It provides a practical alternative to Large Language Models (LLMs) that, despite their flexibility, are costly and large for resource-constrained scenarios.
+GLMMC is a Multilabel Classification Model capable of classifying texts into various labels predifined entties using a bidirectional transformer encoder (BERT-like). It provides a practical alternative to Large Language Models (LLMs) that, despite their flexibility, are costly and large for resource-constrained scenarios.
 
 ### Usage
 ```python
@@ -36,10 +36,6 @@ Predictions: [{'text': 'A celebrity chef has opened a new restaurant specializin
 ```
 
 ## Data
-
-The project uses two well-known machine learning databases:
-1. Alphadigits: This database contains alphanumeric characters and is used to test the models' ability to generalize and recognize complex shapes.
-2. MNIST: The famous MNIST database of handwritten digits is used to evaluate the performance of models in digit recognition.
 
 ## Notebooks 📊
 
