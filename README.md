@@ -1,0 +1,49 @@
+# 👑 GLMMC: Generalist and Lightweight Model for Multilabel Classification 
+
+GLMMC is a Multilabel Classification Model capable of classifyin texts into various labels predifined entties using a bidirectional transformer encoder (BERT-like). It provides a practical alternative to Large Language Models (LLMs) that, despite their flexibility, are costly and large for resource-constrained scenarios.
+
+### Usage
+```python
+
+from model import BiEncoderModel
+
+texts = ["A celebrity chef has opened a new restaurant specializing in vegan cuisine.", 
+         "Doctors are warning about the rise in flu cases this season.", 
+         "The United States has announced plans to build a wall on its border with Mexico."]
+batch_labels = [
+        
+        ["Food", "Business", "Politics"],
+        ["Health", "Food", "Public Health"],
+        ["Immigration", "Religion", "National Security"]
+    ]
+# Load the model
+model = BiEncoderModel("sharki007/bi-encoder-model", max_num_labels=6)
+# Prediction with JSON output
+predictions = model.forward_predict(texts, batch_labels)
+print("Predictions:", predictions)
+
+```
+
+
+#### Expected Output
+
+```
+
+Predictions: [{'text': 'A celebrity chef has opened a new restaurant specializing in vegan cuisine.', 'scores': {'Food': 0.71, 'Business': 0.64, 'Politics': 0.41}}, 
+{'text': 'Doctors are warning about the rise in flu cases this season.', 'scores': {'Health': 0.72, 'Food': 0.49, 'Public Health': 0.7}}, 
+{'text': 'The United States has announced plans to build a wall on its border with Mexico.', 'scores': {'Immigration': 0.69, 'Religion': 0.33, 'National Security': 0.72}}]
+
+```
+
+## Data
+
+The project uses two well-known machine learning databases:
+1. Alphadigits: This database contains alphanumeric characters and is used to test the models' ability to generalize and recognize complex shapes.
+2. MNIST: The famous MNIST database of handwritten digits is used to evaluate the performance of models in digit recognition.
+
+## Notebooks 📊
+
+
+
+## Author 🧑‍💻
+- [Salim ABDOU DAOURA](https://github.com/sabdoudaoura)
