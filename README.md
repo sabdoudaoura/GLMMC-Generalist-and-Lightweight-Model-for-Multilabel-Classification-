@@ -35,6 +35,9 @@ Predictions: [{'text': 'A celebrity chef has opened a new restaurant specializin
 
 ```
 
+#### Data
+
+Synthetic data generated with gpt4-mini and gemini 
 
 ## Author 🧑‍💻
 - [Salim ABDOU DAOURA](https://github.com/sabdoudaoura)
