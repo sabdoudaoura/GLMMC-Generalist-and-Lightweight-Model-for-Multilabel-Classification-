@@ -1,6 +1,6 @@
 # 🤖 GLMMC: Generalist and Lightweight Model for Multilabel Classification 
 
-GLMMC is a Multilabel Classification Model capable of classifying texts into various labels predifined entties using a bidirectional transformer encoder (BERT-like). It provides a practical alternative to Large Language Models (LLMs) that, despite their flexibility, are costly and large for resource-constrained scenarios.
+GLMMC is a Multilabel Classification Model capable of classifying texts into various predefined entities using a bidirectional transformer encoder (BERT-like). It provides a practical alternative to Large Language Models (LLMs), which, despite their flexibility, are costly and too large for resource-constrained scenarios.
 
 ### Usage
 ```python
@@ -34,11 +34,6 @@ Predictions: [{'text': 'A celebrity chef has opened a new restaurant specializin
 {'text': 'The United States has announced plans to build a wall on its border with Mexico.', 'scores': {'Immigration': 0.69, 'Religion': 0.33, 'National Security': 0.72}}]
 
 ```
-
-## Data
-
-## Notebooks 📊
-
 
 
 ## Author 🧑‍💻
