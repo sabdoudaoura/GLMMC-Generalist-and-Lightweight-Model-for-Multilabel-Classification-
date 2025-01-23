@@ -17,14 +17,12 @@ class BiEncoderModel(nn.Module):
         """
         Encodes a list of texts or labels using the shared encoder.
         """
-        #inputs = texts_or_labels_tokenized # self.tokenizer(texts_or_labels_tokenized, return_tensors='pt', padding=True, truncation=True)
         outputs = self.shared_encoder(input_ids = input_ids, attention_mask = attention_mask)
         # mask aware pooling
         # last_hidden_state: [B, seq_len, D]
         att_mask = attention_mask.unsqueeze(-1) ### Create a dimention [B, seq_len, 1] for easier broadcasting
 
-        # normalize each vector
-        return torch.nn.functional.normalize((outputs.last_hidden_state * att_mask).sum(1) / att_mask.sum(1), p=2, dim=-1)  ### Global representation for label or sentence # We sum to get a unique embedding for each sentence
+        return (outputs.last_hidden_state * att_mask).sum(1) / att_mask.sum(1) ### Global representation for label or sentence # We sum to get a unique embedding for each sentence
 
     def forward(self, input_ids_text, attention_mask_text, input_ids_labels, attention_mask_labels, label_counts):
         """
@@ -34,19 +32,17 @@ class BiEncoderModel(nn.Module):
         B = input_ids_text.shape[0]
 
         # Flatten all labels in the batch
-        # all_labels = input_ids_labels.reshape(-1, input_ids_labels.size(2)) # batch labels [["label1", "label2"], ["label3", "label4", "label5"]]
-        # all_masks = input_ids_labels.reshape(-1,  attention_mask_labels.size(2))
         label_embeddings = self.encode(input_ids_labels, attention_mask_labels)  # Shape: [number_of_labels, D]
 
         # Encode texts
         text_embeddings = self.encode(input_ids_text, attention_mask_text)  # Shape: [B, D]
 
         # Prepare to recover batch structure
-        #label_counts = [len(sub_tensor) for sub_tensor in input_ids_labels] #get number of associated labels for each sentence
         max_num_label = self.max_num_labels
         padded_label_embeddings = torch.zeros(B, max_num_label, label_embeddings.size(-1)).to(device) #tensor to store the labels [B, max_num_label, 728]
         mask = torch.zeros(B, max_num_label, dtype=torch.bool).to(device) #[B, max_num_label] each element has 5 places for labels. Mask tell us how many labels are required for this element and their location ("1")
 
+        #possibilité de parallelizer ? 
         current = 0
         for i, count in enumerate(label_counts):
             if count > 0:
@@ -61,7 +57,7 @@ class BiEncoderModel(nn.Module):
         # padded_label_embeddings: [B, max_num_label, D]
         # scores: [B, max_num_label] # Each score is the similarity sentence and word
         scores = torch.bmm(padded_label_embeddings, text_embeddings.unsqueeze(2)).squeeze(2) 
-        #scores = torch.sigmoid(scores) # It's a sigmoid, not a sofmax [95.6674, 67.5585, 37.0487,  0.0000,  0.0000] -> [1.0000, 1.0000, 1.0000, 0.5000, 0.5000]
+        #scores = torch.sigmoid(scores) # loss function computes sigmoid #only if loss has no sigmoid
 
         return scores, mask
 
@@ -80,7 +76,6 @@ class BiEncoderModel(nn.Module):
         input_ids_text = torch.stack([item['input_ids'] for item in texts_tokenized]).squeeze(1).to(device)
         attention_mask_text = torch.stack([item['attention_mask'] for item in texts_tokenized]).squeeze(1).to(device)
 
-        # token_type_ids_text = torch.stack([item['token_type_ids'] for item in texts]).squeeze(1)
 
         input_ids_labels = torch.cat([item['input_ids'] for item in batch_labels_tokenized], dim=0).to(device)
         attention_mask_labels = torch.cat([item['attention_mask'] for item in batch_labels_tokenized], dim=0).to(device)
@@ -104,16 +99,14 @@ if __name__ == "__main__":
     max_num_labels = 4
     model = BiEncoderModel(model_name, max_num_labels)
 
-    texts = ["I love machine learning.", "Deep learning models are powerful."]
+    texts = ["A celebrity chef has opened a new restaurant specializing in vegan cuisine.",
+         "Doctors are warning about the rise in flu cases this season.",
+         "The United States has announced plans to build a wall on its border with Mexico."]
     batch_labels = [
-        ["AI", "Machine Learning"],
-        ["Deep Learning", "Neural Networks", "AI"]
+        ["Food", "Business", "Politics"],
+        ["Health", "Food", "Public Health"],
+        ["Immigration", "Religion", "National Security"]
     ]
-
-    # Forward pass
-    scores, mask = model.forward(texts, batch_labels)
-    print("Scores:", scores)
-    print("Mask:", mask)
 
     # Prediction with JSON output
     predictions = model.forward_predict(texts, batch_labels)

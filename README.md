@@ -37,6 +37,8 @@ Predictions: [{'text': 'A celebrity chef has opened a new restaurant specializin
 
 ## Data
 
+Synthetic
+
 ## Notebooks 📊
 
 
