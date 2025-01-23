@@ -4,7 +4,6 @@ GLMMC is a Multilabel Classification Model capable of classifying texts into var
 
 <p align="center">
     <a href="https://huggingface.co/sabdou/bi-encoder-model">🤗 Model</a>
-    <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
     </a>
 </p>
 
