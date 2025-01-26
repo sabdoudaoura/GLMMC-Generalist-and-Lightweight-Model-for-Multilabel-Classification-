@@ -3,7 +3,7 @@
 GLMMC is a Multilabel Classification Model capable of classifying texts into various predefined entities using a bidirectional transformer encoder (BERT-like). It provides a practical alternative to Large Language Models (LLMs), which, despite their flexibility, are costly and too large for resource-constrained scenarios.
 
 <p align="center">
-    <a href="https://huggingface.co/sabdou/bi-encoder-model">🤗 Model</a>
+    <a href="https://huggingface.co/sabdou/bi-encoder-model">🤗 Available trained model</a>
     </a>
 </p>
 
@@ -39,7 +39,13 @@ Predictions: [
 {'text': 'The United States has announced plans to build a wall on its border with Mexico.', 'scores': {'Immigration': 1.0, 'Religion': 0.0, 'National Security': 1.0}
 ]
 
+
 ```
+
+
+#### Usecase
+
+This model could be used to detect important informations in customer reviews.
 
 #### Data
 
